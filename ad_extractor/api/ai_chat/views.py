@@ -13,5 +13,5 @@ async def chat_with_ai(prompt: str) -> dict:
     ai_model_factory = AIModelFactory(
         model_strategy=OpenAIAIModel(api_key=settings.LLM_API_KEY.get_secret_value(), base_url=settings.BASE_URL)
     )
-    response = ai_model_factory.generate_response(prompt)
+    response = await ai_model_factory.generate_response(prompt)
     return {"response": response}

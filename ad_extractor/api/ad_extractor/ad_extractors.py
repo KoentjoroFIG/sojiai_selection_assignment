@@ -1,4 +1,4 @@
-from openai import OpenAI
+from openai import AsyncOpenAI
 from typing import Optional, Protocol
 
 from pydantic import BaseModel
@@ -6,7 +6,7 @@ from api.schema import ADDocument
 
 
 class ADExtractor(Protocol):
-    def extract_ad(self, text: str | dict, response_format: dict | ADDocument, system_context: Optional[str] = None) -> Optional[ADDocument]:
+    async def extract_ad(self, text: str | dict, response_format: dict | ADDocument, system_context: Optional[str] = None) -> Optional[ADDocument]:
         ...
 
 class OpenAIADExtractor:
@@ -15,15 +15,15 @@ class OpenAIADExtractor:
         self.base_url = base_url
 
 
-    def extract_ad(self, prompt: str | dict, response_format: Optional[dict | BaseModel] =  ADDocument, system_context: Optional[str] = None) -> Optional[ADDocument]:
-        client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+    async def extract_ad(self, prompt: str | dict, response_format: Optional[dict | BaseModel] =  ADDocument, system_context: Optional[str] = None) -> Optional[ADDocument]:
+        client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)
         
         try:
             response_format_json = response_format.model_json_schema()
         except:
             response_format_json = response_format
 
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model="gpt-4o",
             response_format={"type": "json_schema", "json_schema": {"name": "ADDocument", "schema": response_format_json}},
             messages=[
@@ -47,8 +47,7 @@ class GeminiADExtractor:
         self.api_key = api_key
         self.base_url = base_url
 
-    def extract_ad(self, prompt: str | dict, response_format: Optional[dict | BaseModel] =  ADDocument) -> Optional[ADDocument]:
-        # Placeholder for Gemini API integration
+    async def extract_ad(self, prompt: str | dict, response_format: Optional[dict | BaseModel] =  ADDocument) -> Optional[ADDocument]:
         pass
         
 
@@ -58,7 +57,7 @@ class ADExtractorFactory:
             raise ValueError("An ADExtractor strategy must be provided.")
         self._extractor = extractor_strategy
 
-    def extract_ad(self, ad_text: str | dict) -> Optional[ADDocument]:
+    async def extract_ad(self, ad_text: str | dict) -> Optional[ADDocument]:
         """
             Method to extract AD information from the provided text using the specified extractor strategy.
         """
@@ -89,6 +88,6 @@ class ADExtractorFactory:
             AD Text:
             {ad_text}
         """
-        return self._extractor.extract_ad(
+        return await self._extractor.extract_ad(
             prompt=prompt, response_format=ADDocument, system_context=system_context
         )

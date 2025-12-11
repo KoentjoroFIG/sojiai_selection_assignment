@@ -28,15 +28,15 @@ async def evaluation_test() -> dict[str, Any]:
     base_dir = Path(__file__).parent.parent.parent.parent
     output_dir = base_dir / "output"
     
-    ads = load_parsed_ads(output_dir)
+    ads = await load_parsed_ads(output_dir)
     
     evaluator = AircraftEvaluator()
     
-    test_aircraft = create_test_aircraft()
+    test_aircraft = await create_test_aircraft()
     test_results = []
     
     for aircraft in test_aircraft:
-        result = evaluator.evaluate_against_multiple_ads(
+        result = await evaluator.evaluate_against_multiple_ads(
             aircraft, 
             list(ads.values())
         )
@@ -44,7 +44,7 @@ async def evaluation_test() -> dict[str, Any]:
         test_results.append(result.model_dump())
 
     
-    verification_aircraft = create_verification_aircraft()
+    verification_aircraft = await create_verification_aircraft()
     expected_results = [
         {"FAA-2025-23-53": True, "EASA-2025-0254R1": False},
         {"FAA-2025-23-53": False, "EASA-2025-0254R1": False},
@@ -54,12 +54,12 @@ async def evaluation_test() -> dict[str, Any]:
     verification_results = []
     
     for i, aircraft in enumerate(verification_aircraft):
-        result = evaluator.evaluate_against_multiple_ads(
+        result = await evaluator.evaluate_against_multiple_ads(
             aircraft, 
             list(ads.values())
         )
         
-        verification_result = create_verification_result_dict(
+        verification_result = await create_verification_result_dict(
             aircraft,
             result,
             expected_results[i]
@@ -67,10 +67,10 @@ async def evaluation_test() -> dict[str, Any]:
         verification_results.append(verification_result.model_dump())
 
     
-    formatted_verification = format_verification_output(verification_results)
-    all_passed = check_all_verification_passed(verification_results)
+    formatted_verification = await format_verification_output(verification_results)
+    all_passed = await check_all_verification_passed(verification_results)
     
-    response = save_evaluation_results(
+    response = await save_evaluation_results(
         output_dir,
         test_results,
         formatted_verification,
@@ -104,7 +104,7 @@ async def evaluate_cases(aircrafts: list[AircraftConfiguration]) -> EvaluationRe
     base_dir = Path(__file__).parent.parent.parent.parent
     output_dir = base_dir / "output"
     
-    ads = load_parsed_ads(output_dir)
+    ads = await load_parsed_ads(output_dir)
     
     if not ads:
         return EvaluationResponse(status="No parsed AD documents found")
@@ -113,7 +113,7 @@ async def evaluate_cases(aircrafts: list[AircraftConfiguration]) -> EvaluationRe
     
     all_results = []
     for aircraft in aircrafts:
-        evaluation_result = evaluator.evaluate_against_multiple_ads(
+        evaluation_result = await evaluator.evaluate_against_multiple_ads(
             aircraft,
             list(ads.values())
         )

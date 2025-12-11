@@ -3,11 +3,11 @@ from pathlib import Path
 from typing import Optional, Protocol
 
 class TextExtractor(Protocol):
-    def extract(self, pdf_path: Path) -> str:
+    async def extract(self, pdf_path: Path) -> str:
         ...
 
 class PdfPlumberExtractor:
-    def extract(self, pdf_path: Path) -> str:        
+    async def extract(self, pdf_path: Path) -> str:        
         text_parts: list[str] = []
         
         with pdfplumber.open(pdf_path) as pdf:
@@ -19,7 +19,7 @@ class PdfPlumberExtractor:
         return "\n\n".join(text_parts)
     
 class OCRExtractor:
-    def extract(self, pdf_path: Path) -> str:
+    async def extract(self, pdf_path: Path) -> str:
         #if you have case that need ocr put it here. Make new strategy for OCRTextExtraction
         #Becasue in the assignment there is no need for this case, I leave it as a placeholder
         pass
@@ -33,14 +33,14 @@ class PDFExtractorFactory:
         self._extractor = extractor_strategy
 
 
-    def extract_text(self, pdf_path: Path | str) -> str:
+    async def extract_text(self, pdf_path: Path | str) -> str:
         """
             Method to extract text from a single PDF file.
         """
         path = Path(pdf_path) if isinstance(pdf_path, str) else pdf_path
-        return self._extractor.extract(path)
+        return await self._extractor.extract(path)
     
-    def bulk_extract(self, pdf_directory: Path | str) -> dict[str, str]:
+    async def bulk_extract(self, pdf_directory: Path | str) -> dict[str, str]:
         """
             Method to extract text from all PDF files in a given directory.
         """
@@ -52,6 +52,6 @@ class PDFExtractorFactory:
         extracted_texts: dict[str, str] = {}
         
         for pdf_file in dir_path.glob("*.pdf"):
-            extracted_texts[pdf_file.name] = self.extract_text(pdf_file)
+            extracted_texts[pdf_file.name] = await self.extract_text(pdf_file)
         
         return extracted_texts

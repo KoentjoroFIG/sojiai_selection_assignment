@@ -27,10 +27,10 @@ async def extraction_test() -> ADExtractionResponse:
 
     base_dir = Path(__file__).parent.parent.parent.parent
     pdf_directory = base_dir / "ad_docs"
-    output_directory = get_output_directory(base_dir)
+    output_directory = await get_output_directory(base_dir)
     
-    extracted_texts = pdf_extractor.bulk_extract(pdf_directory)
-    ad_documents = bulk_process_ads(extracted_texts, ad_extractor, output_directory)
+    extracted_texts = await pdf_extractor.bulk_extract(pdf_directory)
+    ad_documents = await bulk_process_ads(extracted_texts, ad_extractor, output_directory)
     
     if not ad_documents:
         return ADExtractionResponse(status="failure")
@@ -56,11 +56,11 @@ async def extract_ad_from_path(pdf_path: str) -> ADExtractionResponse:
     )
 
     base_dir = Path(__file__).parent.parent.parent.parent
-    output_directory = get_output_directory(base_dir)
+    output_directory = await get_output_directory(base_dir)
     
-    extracted_text = pdf_extractor.extract_text(pdf_path)
+    extracted_text = await pdf_extractor.extract_text(pdf_path)
     filename = Path(pdf_path).stem
-    ad_document = process_and_save_ad(extracted_text, filename, ad_extractor, output_directory)
+    ad_document = await process_and_save_ad(extracted_text, filename, ad_extractor, output_directory)
 
     if not ad_document:
         return ADExtractionResponse(status="failure")
@@ -81,10 +81,10 @@ async def extract_ads_from_directory(pdf_directory: str) -> ADExtractionResponse
     )
 
     base_dir = Path(__file__).parent.parent.parent.parent
-    output_directory = get_output_directory(base_dir)
+    output_directory = await get_output_directory(base_dir)
     
-    extracted_texts = pdf_extractor.bulk_extract(pdf_directory)
-    ad_documents = bulk_process_ads(extracted_texts, ad_extractor, output_directory)
+    extracted_texts = await pdf_extractor.bulk_extract(pdf_directory)
+    ad_documents = await bulk_process_ads(extracted_texts, ad_extractor, output_directory)
     
     if not ad_documents:
         return ADExtractionResponse(status="failure")
@@ -105,7 +105,7 @@ async def extract_ads_from_directory(pdf_directory: str) -> ADExtractionResponse
     )
 async def list_all_extracted_ads() -> ADExtractionResponse:
     base_dir = Path(__file__).parent.parent.parent.parent
-    output_directory = get_output_directory(base_dir)
+    output_directory = await get_output_directory(base_dir)
     
     extracted_ads = []
     for json_file in output_directory.glob("*_parsed.json"):

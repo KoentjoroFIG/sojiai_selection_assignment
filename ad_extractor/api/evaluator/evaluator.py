@@ -10,7 +10,7 @@ from api.schema import (
 
 
 class AircraftEvaluator:    
-    def evaluate(
+    async def evaluate(
             self, 
             aircraft: AircraftConfiguration, 
             ad: ADDocument
@@ -20,7 +20,7 @@ class AircraftEvaluator:
         """
         rules = ad.applicability_rules
         
-        model_matched, model_reason = self._check_model_match(
+        model_matched, model_reason = await self._check_model_match(
             aircraft.aircraft_model, 
             rules.aircraft_models
         )
@@ -35,7 +35,7 @@ class AircraftEvaluator:
                 )]
             )
         
-        msn_passed, msn_reason = self._check_msn_constraints(
+        msn_passed, msn_reason = await self._check_msn_constraints(
             aircraft.msn, 
             rules.msn_constraints
         )
@@ -50,7 +50,7 @@ class AircraftEvaluator:
                 )]
             )
         
-        exempted, exemption_reason = self._check_modification_exemptions(
+        exempted, exemption_reason = await self._check_modification_exemptions(
             aircraft.modifications_applied or [],
             rules.excluded_if_modifications
         )
@@ -74,7 +74,7 @@ class AircraftEvaluator:
             )]
         )
     
-    def _check_model_match(
+    async def _check_model_match(
         self, 
         aircraft_model: str, 
         affected_models: list[str]
@@ -93,12 +93,12 @@ class AircraftEvaluator:
             if aircraft_upper == affected_upper:
                 return True, affected
             
-            if self._is_model_variant(aircraft_upper, affected_upper):
+            if await self._is_model_variant(aircraft_upper, affected_upper):
                 return True, affected
         
         return False, ""
     
-    def _is_model_variant(self, aircraft: str, base_model: str) -> bool:
+    async def _is_model_variant(self, aircraft: str, base_model: str) -> bool:
         aircraft = aircraft.replace(" ", "").replace("-", "")
         base = base_model.replace(" ", "").replace("-", "")
         
@@ -110,7 +110,7 @@ class AircraftEvaluator:
             
         return False
     
-    def _check_msn_constraints(
+    async def _check_msn_constraints(
         self, 
         msn: Optional[int], 
         constraints: Optional[MSNConstraint]
@@ -146,7 +146,7 @@ class AircraftEvaluator:
         
         return True, f"MSN {msn} within affected range"
     
-    def _check_modification_exemptions(
+    async def _check_modification_exemptions(
         self,
         applied_mods: list[str],
         exempting_mods: list[str]
@@ -162,13 +162,13 @@ class AircraftEvaluator:
         
         for applied in applied_mods:
             for exempting in exempting_mods:
-                match_result = self._fuzzy_mod_match(applied, exempting)
+                match_result = await self._fuzzy_mod_match(applied, exempting)
                 if match_result:
                     return True, f"Has exempting modification: '{applied}' matches '{exempting}'"
         
         return False, "No exempting modifications found"
     
-    def _fuzzy_mod_match(
+    async def _fuzzy_mod_match(
             self, 
             applied: str, 
             exempting: str
@@ -176,8 +176,8 @@ class AircraftEvaluator:
         """
             Method to perform fuzzy matching between applied and exempting modification names.
         """
-        applied_norm = self._normalize_mod_name(applied)
-        exempting_norm = self._normalize_mod_name(exempting)
+        applied_norm = await self._normalize_mod_name(applied)
+        exempting_norm = await self._normalize_mod_name(exempting)
         
         if applied_norm == exempting_norm:
             return True
@@ -188,8 +188,8 @@ class AircraftEvaluator:
         if applied_norm in exempting_norm:
             return True
         
-        applied_ids = self._extract_identifiers(applied_norm)
-        exempting_ids = self._extract_identifiers(exempting_norm)
+        applied_ids = await self._extract_identifiers(applied_norm)
+        exempting_ids = await self._extract_identifiers(exempting_norm)
         
         common = applied_ids & exempting_ids
         if common:
@@ -197,7 +197,7 @@ class AircraftEvaluator:
         
         return False
     
-    def _normalize_mod_name(self, name: str) -> str:
+    async def _normalize_mod_name(self, name: str) -> str:
         """
             Method to normalize modification names for comparison.
         """
@@ -206,7 +206,7 @@ class AircraftEvaluator:
         normalized = ' '.join(normalized.split())
         return normalized.strip()
     
-    def _extract_identifiers(self, text: str) -> set[str]:
+    async def _extract_identifiers(self, text: str) -> set[str]:
         """
             Method to extract numeric and alphanumeric identifiers from modification names.
         """
@@ -224,7 +224,7 @@ class AircraftEvaluator:
         
         return identifiers
     
-    def evaluate_against_multiple_ads(
+    async def evaluate_against_multiple_ads(
         self,
         aircraft: AircraftConfiguration,
         ads: list[ADDocument]
@@ -235,7 +235,7 @@ class AircraftEvaluator:
         """
         evaluation_keys = []
         for ad in ads:
-            result = self.evaluate(aircraft, ad)
+            result = await self.evaluate(aircraft, ad)
             if result.results:
                 evaluation_keys.extend(result.results)
         

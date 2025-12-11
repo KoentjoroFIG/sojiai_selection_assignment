@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Dict, Optional, Protocol
 
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 from api.schema import ADDocument
 from api.utils import load_parsed_ads
@@ -9,7 +9,7 @@ from config.config import settings
 
 
 class AIModel(Protocol):
-    def generate_response(
+    async def generate_response(
             self, prompt: str | dict, 
             system_context: Optional[str] = None, 
             temperature: Optional[float] = None
@@ -22,13 +22,13 @@ class OpenAIAIModel:
         self.api_key = api_key
         self.base_url = base_url
 
-    def generate_response(
+    async def generate_response(
             self, prompt: str | dict, 
             system_context: Optional[str] = None, 
             temperature: Optional[float] = 0.2
     ) -> str:
-        client = OpenAI(api_key=self.api_key, base_url=self.base_url)        
-        response = client.chat.completions.create(
+        client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)        
+        response = await client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": system_context},
@@ -44,7 +44,7 @@ class GeminiAIModel:
         self.api_key = api_key
         self.base_url = base_url
 
-    def generate_response(self, prompt: str | dict) -> str:
+    async def generate_response(self, prompt: str | dict) -> str:
         # Placeholder for Gemini API integration
         pass
 
@@ -55,7 +55,7 @@ class AIModelFactory:
             raise ValueError("An AIModel strategy must be provided.")
         self._model = model_strategy
 
-    def generate_response(
+    async def generate_response(
             self, prompt: str | dict, 
             temperature: Optional[float] = 0.2
     ) -> str:
@@ -71,7 +71,7 @@ class AIModelFactory:
         base_dir = Path(__file__).parent.parent.parent.parent
         output_dir = base_dir / "output"
 
-        ads: Dict[str, ADDocument] = load_parsed_ads(output_dir)
+        ads: Dict[str, ADDocument] = await load_parsed_ads(output_dir)
         for ad_id, ad in ads.items():
             system_context += f"\nAD ID:  {ad_id}\n"
             system_context += f"Title: {ad.title}\n"
@@ -88,4 +88,4 @@ class AIModelFactory:
 
             Be concise, accurate, and cite relevant AD rules.
         """
-        return self._model.generate_response(prompt, system_context, temperature)
+        return await self._model.generate_response(prompt, system_context, temperature)

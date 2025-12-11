@@ -1,6 +1,6 @@
 {
     "ad_id": "EASA-2025-0254R1",
-    "title": "Wing – Main Landing Gear Retraction Actuator Fitting – Inspection",
+    "title": "ATA 57 – Wing – Main Landing Gear Retraction Actuator Fitting – Inspection",
     "effective_date": "08 December 2025",
     "applicability_rules": {
         "aircraft_models": [
@@ -30,7 +30,7 @@
         "required_modifications": [
             "Airbus SB A320-57-1089 Revision 04"
         ],
-        "additional_conditions": "For Group 1 aeroplanes, inspections must be done before exceeding 37,300 flight hours or 20,000 flight cycles, whichever occurs first, and thereafter at intervals not exceeding 10,200 FH or 5,500 FC. For Group 2 aeroplanes, inspections must be done before exceeding 39,400 FH or 24,000 FC, and thereafter at intervals not exceeding 5,600 FH or 3,600 FC."
+        "additional_conditions": "For Group 1 aeroplanes, inspections are required before exceeding 37,300 flight hours or 20,000 flight cycles, and thereafter at intervals not exceeding 10,200 flight hours or 5,500 flight cycles. For Group 2 aeroplanes, inspections are required before exceeding 39,400 flight hours or 24,000 flight cycles, and thereafter at intervals not exceeding 5,600 flight hours or 3,600 flight cycles. For Group 3 aeroplanes, modification is required before exceeding 48,000 flight cycles or 96,000 flight hours."
     },
     "raw_applicability_text": "Airbus A320-211, A320-212, A320-214, A320-215, A320-216, A320-231, A320-232 and A320-233 aeroplanes, all manufacturer serial numbers (MSN), except those on which Airbus modification (mod) 24591 has been embodied in production and except those on which have Airbus Service Bulletin (SB) A320-57-1089 at Revision 04 has been embodied in service; and Airbus A321-111, A321-112 and A321-131, all MSN, except those on which Airbus mod 24977 has been embodied in production."
 }

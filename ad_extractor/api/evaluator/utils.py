@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 from api.schema import AircraftConfiguration, EvaluationResult, ValidationKey, VerificationResult
 
 
-def create_verification_result_dict(
+async def create_verification_result_dict(
     aircraft: AircraftConfiguration,
     ad_evaluation_result: Optional[EvaluationResult],
     expected_results: Dict[str, bool],
@@ -35,7 +35,7 @@ def create_verification_result_dict(
     )
 
 
-def format_verification_output(
+async def format_verification_output(
         verification_results: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
     """
@@ -67,7 +67,7 @@ def format_verification_output(
     return formatted_results
 
 
-def check_all_verification_passed(
+async def check_all_verification_passed(
         verification_results: List[Dict[str, Any]]
 ) -> bool:
     """
@@ -81,7 +81,7 @@ def check_all_verification_passed(
     return True
 
 
-def save_evaluation_results(
+async def save_evaluation_results(
     output_dir: Path,
     test_results: List[Dict[str, Any]],
     verification_results: List[Dict[str, Any]],

@@ -6,7 +6,7 @@ from api.ad_extractor.document_extractors import PDFExtractorFactory
 from api.schema import ADDocument
 
 
-def get_output_directory(base_dir: Path) -> Path:
+async def get_output_directory(base_dir: Path) -> Path:
     """
         Get directory where to save processed AD documents.
     """
@@ -15,7 +15,7 @@ def get_output_directory(base_dir: Path) -> Path:
     return output_directory
 
 
-def save_ad_document(
+async def save_ad_document(
         ad_document: ADDocument, 
         output_directory: Path
 ) -> Path:
@@ -28,7 +28,7 @@ def save_ad_document(
     return output_path
 
 
-def process_and_save_ad(
+async def process_and_save_ad(
     text: str,
     ad_extractor: ADExtractorFactory,
     output_directory: Path
@@ -36,16 +36,16 @@ def process_and_save_ad(
     """
         Process one extracted text to create an ADDocument and save it.
     """
-    ad_document = ad_extractor.extract_ad(text)
+    ad_document = await ad_extractor.extract_ad(text)
     
     if not ad_document:
         return None
     
-    save_ad_document(ad_document, output_directory)
+    await save_ad_document(ad_document, output_directory)
     return ad_document
 
 
-def bulk_process_ads(
+async def bulk_process_ads(
     extracted_texts: Dict[str, str],
     ad_extractor: ADExtractorFactory,
     output_directory: Path
@@ -56,7 +56,7 @@ def bulk_process_ads(
     ad_documents = {}
     
     for text in extracted_texts.values():
-        ad_document = process_and_save_ad(text, ad_extractor, output_directory)
+        ad_document = await process_and_save_ad(text, ad_extractor, output_directory)
         if ad_document:
             ad_documents[ad_document.ad_id] = ad_document
     

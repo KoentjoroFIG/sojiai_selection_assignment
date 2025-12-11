@@ -1,7 +1,7 @@
 from api.schema import AircraftConfiguration
 
 
-def create_test_aircraft() -> list[AircraftConfiguration]:
+async def create_test_aircraft() -> list[AircraftConfiguration]:
     return [
         AircraftConfiguration(aircraft_model="MD-11", msn=48123, modifications_applied=[]),
         AircraftConfiguration(aircraft_model="DC-10-30F", msn=47890, modifications_applied=[]),
@@ -15,7 +15,7 @@ def create_test_aircraft() -> list[AircraftConfiguration]:
         AircraftConfiguration(aircraft_model="MD-10-10F", msn=46234, modifications_applied=[]),
     ]
 
-def create_verification_aircraft() -> list[AircraftConfiguration]:
+async def create_verification_aircraft() -> list[AircraftConfiguration]:
     return [
         AircraftConfiguration(aircraft_model="MD-11F", msn=48400, modifications_applied=[]),
         AircraftConfiguration(aircraft_model="A320-214", msn=4500, modifications_applied=["mod 24591 (production)"]),
