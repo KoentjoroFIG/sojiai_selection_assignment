@@ -1,0 +1,266 @@
+{
+  "test_aircraft_results": [
+    {
+      "aircraft": {
+        "aircraft_model": "MD-11",
+        "msn": 48123,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Aircraft model 'MD-11' not in affected models: ['A320-211', 'A320-212', 'A320-214', 'A320-215', 'A320-216', 'A320-231', 'A320-232', 'A320-233', 'A321-111', 'A321-112', 'A321-131']"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": true,
+          "reason": "Aircraft matches affected model 'MD-11' and meets all AD criteria"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "DC-10-30F",
+        "msn": 47890,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Aircraft model 'DC-10-30F' not in affected models: ['A320-211', 'A320-212', 'A320-214', 'A320-215', 'A320-216', 'A320-231', 'A320-232', 'A320-233', 'A321-111', 'A321-112', 'A321-131']"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": true,
+          "reason": "Aircraft matches affected model 'DC-10-30' and meets all AD criteria"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "Boeing 737-800",
+        "msn": 30123,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Aircraft model 'Boeing 737-800' not in affected models: ['A320-211', 'A320-212', 'A320-214', 'A320-215', 'A320-216', 'A320-231', 'A320-232', 'A320-233', 'A321-111', 'A321-112', 'A321-131']"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'Boeing 737-800' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A320-214",
+        "msn": 5234,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": true,
+          "reason": "Aircraft matches affected model 'A320-214' and meets all AD criteria"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A320-214' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A320-232",
+        "msn": 6789,
+        "modifications_applied": [
+          "mod 24591 (production)"
+        ]
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Has exempting modification: 'mod 24591 (production)' matches 'Airbus modification 24591'"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A320-232' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A320-214",
+        "msn": 7456,
+        "modifications_applied": [
+          "SB A320-57-1089 Rev 04"
+        ]
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Has exempting modification: 'SB A320-57-1089 Rev 04' matches 'Airbus Service Bulletin A320-57-1089 at Revision 04'"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A320-214' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A321-111",
+        "msn": 8123,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": true,
+          "reason": "Aircraft matches affected model 'A321-111' and meets all AD criteria"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A321-111' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A321-112",
+        "msn": 364,
+        "modifications_applied": [
+          "mod 24977 (production)"
+        ]
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Has exempting modification: 'mod 24977 (production)' matches 'Airbus modification 24977'"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A321-112' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "A319-100",
+        "msn": 9234,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Aircraft model 'A319-100' not in affected models: ['A320-211', 'A320-212', 'A320-214', 'A320-215', 'A320-216', 'A320-231', 'A320-232', 'A320-233', 'A321-111', 'A321-112', 'A321-131']"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": false,
+          "reason": "Aircraft model 'A319-100' not in affected models: ['MD-11', 'MD-11F', 'MD-10-10F', 'MD-10-30F', 'DC-10-10', 'DC-10-10F', 'DC-10-15', 'DC-10-30', 'DC-10-30F (KC-10A and KDC-10)', 'DC-10-40', 'DC-10-40F']"
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "aircraft_model": "MD-10-10F",
+        "msn": 46234,
+        "modifications_applied": []
+      },
+      "results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "is_affected": false,
+          "reason": "Aircraft model 'MD-10-10F' not in affected models: ['A320-211', 'A320-212', 'A320-214', 'A320-215', 'A320-216', 'A320-231', 'A320-232', 'A320-233', 'A321-111', 'A321-112', 'A321-131']"
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "is_affected": true,
+          "reason": "Aircraft matches affected model 'MD-10-10F' and meets all AD criteria"
+        }
+      ]
+    }
+  ],
+  "verification_results": [
+    {
+      "aircraft": {
+        "model": "MD-11F",
+        "msn": 48400,
+        "modifications": "None"
+      },
+      "ad_results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "affected": false,
+          "expected": false,
+          "passed": true
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "affected": true,
+          "expected": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "model": "A320-214",
+        "msn": 4500,
+        "modifications": "mod 24591 (production)"
+      },
+      "ad_results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "affected": false,
+          "expected": false,
+          "passed": true
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "affected": false,
+          "expected": false,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "aircraft": {
+        "model": "A320-214",
+        "msn": 4500,
+        "modifications": "None"
+      },
+      "ad_results": [
+        {
+          "ad_id": "EASA-2025-0254R1",
+          "affected": true,
+          "expected": true,
+          "passed": true
+        },
+        {
+          "ad_id": "FAA-2025-23-53",
+          "affected": false,
+          "expected": false,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "all_verification_passed": true
+}

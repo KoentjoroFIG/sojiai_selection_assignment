@@ -1,0 +1,25 @@
+{
+    "ad_id": "FAA-2025-23-53",
+    "title": "Airworthiness Directives; The Boeing Company Airplanes",
+    "effective_date": "December 1, 2025",
+    "applicability_rules": {
+        "aircraft_models": [
+            "MD-11",
+            "MD-11F",
+            "MD-10-10F",
+            "MD-10-30F",
+            "DC-10-10",
+            "DC-10-10F",
+            "DC-10-15",
+            "DC-10-30",
+            "DC-10-30F (KC-10A and KDC-10)",
+            "DC-10-40",
+            "DC-10-40F"
+        ],
+        "msn_constraints": null,
+        "excluded_if_modifications": [],
+        "required_modifications": [],
+        "additional_conditions": "Further flight is prohibited until the airplane is inspected and all applicable corrective actions are performed using a method approved by the Manager, AIR-520, Continued Operational Safety Branch, FAA."
+    },
+    "raw_applicability_text": "This emergency AD applies to all The Boeing Company airplanes, certificated in any category, as identified in paragraphs (c)(1) through (3) of this emergency AD.\n(1) Model MD-11 and MD-11F airplanes.\n(2) Model MD-10-10F and MD-10-30F airplanes.\n(3) Model DC-10-10, DC-10-10F, DC-10-15, DC-10-30, DC-10-30F (KC-10A and KDC-10), DC-10-40, and DC-10-40F airplanes."
+}
