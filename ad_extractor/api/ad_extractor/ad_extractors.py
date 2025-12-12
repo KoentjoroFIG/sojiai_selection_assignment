@@ -58,13 +58,14 @@ class ADExtractorFactory:
         self._extractor = extractor_strategy
 
     async def extract_ad(self, ad_text: str | dict) -> Optional[ADDocument]:
-        """
-            Method to extract AD information from the provided text using the specified extractor strategy.
-        """
         system_context = """
             You are an expert Airworthiness Directive (AD) extraction system. 
             Your task is to accurately parse AD documents and extract structured information following strict rules.            
             Extract the applicability rules from AD text and structure them into JSON format with precision.
+            
+            CRITICAL: Pay attention to MODEL-SPECIFIC EXCLUSIONS.
+            Different modifications may exempt different aircraft models.
+            You must capture which models each exclusion applies to.
         """
         
         prompt = f"""
@@ -82,7 +83,25 @@ class ADExtractorFactory:
                 - If it says "all MSN" with no range, set both min and max to null
                 - Becareful to not confuse MSN with other numbers like mod number, part numbers, SB numbers, etc.
             4. Extract required modifications (SBs, mods that need to be done)
-            5. Extract excluded modifications (mods/SBs that exempt the aircraft if already applied)
+            
+            5. CRITICAL - MODEL-SPECIFIC EXCLUSIONS:
+               When extracting modifications that exempt aircraft, determine which models each exclusion applies to:
+               
+               Example from EASA AD text:
+               "A320-211, A320-212... all MSN, except those on which Airbus mod 24591 has been embodied..."
+               "A321-111, A321-112... all MSN, except those on which Airbus mod 24977 has been embodied..."
+               
+               This means:
+               - mod 24591 ONLY exempts A320 variants (NOT A321)
+               - mod 24977 ONLY exempts A321 variants (NOT A320)
+               
+               For model_specific_exclusions, create entries like:
+               [{{"modification": "Airbus modification 24591", "applicable_models": ["A320-211", "A320-212", "A320-214"]}},
+                {{"modification": "Airbus modification 24977", "applicable_models": ["A321-111", "A321-112", "A321-131"]}}]
+               
+               If an exclusion applies to ALL models in the AD, set applicable_models to null.
+               DO NOT use excluded_if_modifications field, use model_specific_exclusions instead.
+               
             6. Extract any additional conditions (time limits, inspection intervals, etc.)
             
             AD Text:

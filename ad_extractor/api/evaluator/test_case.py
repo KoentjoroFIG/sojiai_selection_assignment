@@ -1,4 +1,6 @@
-from api.schema import AircraftConfiguration
+from api.schema import (
+    AircraftConfiguration,
+)
 
 
 async def create_test_aircraft() -> list[AircraftConfiguration]:
@@ -20,4 +22,29 @@ async def create_verification_aircraft() -> list[AircraftConfiguration]:
         AircraftConfiguration(aircraft_model="MD-11F", msn=48400, modifications_applied=[]),
         AircraftConfiguration(aircraft_model="A320-214", msn=4500, modifications_applied=["mod 24591 (production)"]),
         AircraftConfiguration(aircraft_model="A320-214", msn=4500, modifications_applied=[]),
+    ]
+
+
+async def create_model_specific_exclusion_test() -> list[AircraftConfiguration]:
+    return [
+        AircraftConfiguration(
+            aircraft_model="A321-111", 
+            msn=8123, 
+            modifications_applied=["mod 24591 (production)"]
+        ),
+        AircraftConfiguration(
+            aircraft_model="A320-214", 
+            msn=5234, 
+            modifications_applied=["mod 24977 (production)"]
+        ),
+        AircraftConfiguration(
+            aircraft_model="A320-214", 
+            msn=5234, 
+            modifications_applied=["mod 24591 (production)"]
+        ),
+        AircraftConfiguration(
+            aircraft_model="A321-112", 
+            msn=364, 
+            modifications_applied=["mod 24977 (production)"]
+        ),
     ]

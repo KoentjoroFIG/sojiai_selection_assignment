@@ -17,7 +17,7 @@
             "DC-10-40F"
         ],
         "msn_constraints": null,
-        "excluded_if_modifications": [],
+        "exclude_if_modification": [],
         "required_modifications": [],
         "additional_conditions": "Further flight is prohibited until the airplane is inspected and all applicable corrective actions are performed using a method approved by the Manager, AIR-520, Continued Operational Safety Branch, FAA."
     },

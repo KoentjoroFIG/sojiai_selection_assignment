@@ -6,6 +6,7 @@ from api.schema import (
     EvaluationResult,
     EvaluationKey,
     MSNConstraint,
+    ExcludeIfModification,
 )
 
 
@@ -51,6 +52,7 @@ class AircraftEvaluator:
             )
         
         exempted, exemption_reason = await self._check_modification_exemptions(
+            aircraft.aircraft_model,
             aircraft.modifications_applied or [],
             rules.excluded_if_modifications
         )
@@ -148,25 +150,40 @@ class AircraftEvaluator:
     
     async def _check_modification_exemptions(
         self,
+        aircraft_model: str,
         applied_mods: list[str],
-        exempting_mods: list[str]
+        excluded_if_modifications: list[ExcludeIfModification]
     ) -> tuple[bool, str]:
-        """
-            Method to check if any of the applied modifications exempt the aircraft from the AD.
-        """
-        if not exempting_mods:
-            return False, "No exempting modifications defined"
-        
         if not applied_mods:
             return False, "No modifications applied"
         
-        for applied in applied_mods:
-            for exempting in exempting_mods:
-                match_result = await self._fuzzy_mod_match(applied, exempting)
-                if match_result:
-                    return True, f"Has exempting modification: '{applied}' matches '{exempting}'"
+        if not excluded_if_modifications:
+            return False, "No exempting modifications defined"
         
-        return False, "No exempting modifications found"
+        for exclusion in excluded_if_modifications:
+            if not await self._exclusion_applies_to_model(exclusion, aircraft_model):
+                continue
+            
+            for applied in applied_mods:
+                if await self._fuzzy_mod_match(applied, exclusion.modification):
+                    return True, f"Has exempting modification: '{applied}' matches '{exclusion.modification}'"
+        
+        return False, "No applicable exempting modifications found"
+    
+    async def _exclusion_applies_to_model(
+        self,
+        exclusion: ExcludeIfModification,
+        aircraft_model: str
+    ) -> bool:
+        if not exclusion.applicable_models:
+            return True
+        
+        for applicable_model in exclusion.applicable_models:
+            match_result, _ = await self._check_model_match(aircraft_model, [applicable_model])
+            if match_result:
+                return True
+        
+        return False
     
     async def _fuzzy_mod_match(
             self, 

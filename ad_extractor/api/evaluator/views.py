@@ -5,14 +5,14 @@ from fastapi import APIRouter
 
 from api.evaluator.schema import EvaluationResponse
 from api.evaluator.evaluator import AircraftEvaluator
-from api.evaluator.test_case import create_verification_aircraft
+from api.evaluator.test_case import create_verification_aircraft, create_model_specific_exclusion_test
 from api.evaluator.utils import (
     create_verification_result_dict,
     format_verification_output,
     check_all_verification_passed,
     save_evaluation_results
 )
-from api.schema import AircraftConfiguration, EvaluationResult
+from api.schema import AircraftConfiguration
 from api.utils import load_parsed_ads
 from api.evaluator.test_case import create_test_aircraft
 
@@ -44,6 +44,29 @@ async def evaluation_test() -> dict[str, Any]:
         test_results.append(result.model_dump())
 
     
+    model_specific_test_aircraft = await create_model_specific_exclusion_test()
+    model_specific_expected = [
+        {"FAA-2025-23-53": False, "EASA-2025-0254R1": True},   # A321 with mod 24591 -> AFFECTED
+        {"FAA-2025-23-53": False, "EASA-2025-0254R1": True},   # A320 with mod 24977 -> AFFECTED
+        {"FAA-2025-23-53": False, "EASA-2025-0254R1": False},  # A320 with mod 24591 -> NOT AFFECTED
+        {"FAA-2025-23-53": False, "EASA-2025-0254R1": False},  # A321 with mod 24977 -> NOT AFFECTED
+    ]
+    
+    model_specific_results = []
+    for i, aircraft in enumerate(model_specific_test_aircraft):
+        result = await evaluator.evaluate_against_multiple_ads(
+            aircraft, 
+            list(ads.values())
+        )
+        
+        verification_result = await create_verification_result_dict(
+            aircraft,
+            result,
+            model_specific_expected[i]
+        )
+        model_specific_results.append(verification_result.model_dump())
+
+    
     verification_aircraft = await create_verification_aircraft()
     expected_results = [
         {"FAA-2025-23-53": True, "EASA-2025-0254R1": False},
@@ -68,7 +91,9 @@ async def evaluation_test() -> dict[str, Any]:
 
     
     formatted_verification = await format_verification_output(verification_results)
+    formatted_model_specific = await format_verification_output(model_specific_results)
     all_passed = await check_all_verification_passed(verification_results)
+    model_specific_passed = await check_all_verification_passed(model_specific_results)
     
     response = await save_evaluation_results(
         output_dir,
@@ -76,6 +101,11 @@ async def evaluation_test() -> dict[str, Any]:
         formatted_verification,
         all_passed
     )
+    
+    response["model_specific_exclusion_test"] = {
+        "results": formatted_model_specific,
+        "all_passed": model_specific_passed
+    }
 
     return response
 

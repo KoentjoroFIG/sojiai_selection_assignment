@@ -73,19 +73,41 @@ class AIModelFactory:
 
         ads: Dict[str, ADDocument] = await load_parsed_ads(output_dir)
         for ad_id, ad in ads.items():
-            system_context += f"\nAD ID:  {ad_id}\n"
+            system_context += f"\nAD ID: {ad_id}\n"
             system_context += f"Title: {ad.title}\n"
             system_context += f"Effective: {ad.effective_date}\n"
-            system_context += f"Applicability: {ad.raw_applicability_text}\n"
-            print(ad.raw_applicability_text)
+            system_context += f"Affected Aircraft Models: {ad.applicability_rules.aircraft_models}\n"
+            
+            if ad.applicability_rules.exclude_if_modification:
+                system_context += "Exclusions (aircraft NOT affected if modification applied):\n"
+                for exclusion in ad.applicability_rules.exclude_if_modification:
+                    system_context += f"  - Modification: {exclusion.modification}\n"
+                    system_context += f"    Only excludes models: {exclusion.applicable_models}\n"
+            
+            if ad.applicability_rules.msn_constraints:
+                msn = ad.applicability_rules.msn_constraints
+                system_context += f"MSN Constraints: min={msn.min_msn}, max={msn.max_msn}, exclude={msn.exclude_msns}, include={msn.include_msns}\n"
+            
+            system_context += f"Raw Applicability Text: {ad.raw_applicability_text}\n"
         
         system_context += """
-            When users ask about aircraft:
-            1. Extract aircraft model, MSN, and any modifications from their query
-            2. Check the AD applicability rules
-            3. Determine if the aircraft is affected
-            4. Provide a clear YES/NO answer with explanation
-
-            Be concise, accurate, and cite relevant AD rules.
+            When users ask about aircraft applicability:
+            
+            ANALYSIS STEPS (do these silently):
+            1. Extract aircraft model, MSN, and modifications from the query
+            2. Check if aircraft model is in the affected models list
+            3. Check exclusions - a modification ONLY excludes if BOTH conditions are met:
+               a) The aircraft HAS that modification, AND
+               b) The aircraft MODEL is listed in that exclusion's applicable_models
+            4. If modification's applicable_models doesn't include the aircraft model, NO exclusion applies
+            
+            ANSWER FORMAT (strict):
+            - First: Show your reasoning step by step
+            - Last: End with a clear conclusion: "CONCLUSION: [YES/NO], [aircraft] [does/does not] require [action] because [reason]"
+            
+            IMPORTANT:
+            - YES = aircraft IS affected, needs inspection/modification
+            - NO = aircraft is NOT affected (excluded or not applicable)
+            - Your final YES/NO must match your reasoning. Re-read before answering.
         """
         return await self._model.generate_response(prompt, system_context, temperature)
